@@ -6,39 +6,41 @@
 	> Count the occurances of each nucleotide, save this into lists
 	> Complile all information about each into own list
 '''
-sequence = open('single_fasta.fa', 'r')
+sequence = open('fasta.fa', 'r')
 fastaseqs = sequence.read()
+sequences = []
+identifiers = [] 
 
 lines = fastaseqs.splitlines()
 
 for i in lines:
 	if i.startswith('>'):
-		identifier = i[2:]
+		identifiers.append(i[1:])
 	else:
-		sequence = i 
+		sequences.append(i)
 
-#identifier = identifier[2:]
+count = 0
+for i in sequences:
+	reverse = list(reversed(i))
+	complement = []
 
-reverse = list(reversed(sequence))
-complement = []
+	for x in reverse: 
+		if x == 'A':
+			complement.append('T')
+		if x == 'G':
+			complement.append('C')
+		if x == 'C':
+			complement.append('G')
+		if x == 'T':
+			complement.append('A')
 
-for x in reverse: 
-	if x == 'A':
-		complement.append('T')
-	if x == 'G':
-		complement.append('C')
-	if x == 'C':
-		complement.append('G')
-	if x == 'T':
-		complement.append('A')
+	reverse_complement = ''.join(complement)
 
-reverse_complement = ''.join(complement)
+	a_count = reverse_complement.count('A')
+	g_count = reverse_complement.count('G')
+	c_count = reverse_complement.count('C')
+	t_count = reverse_complement.count('T')
 
-a_count = reverse_complement.count('A')
-g_count = reverse_complement.count('G')
-c_count = reverse_complement.count('C')
-t_count = reverse_complement.count('T')
-
-data = [identifier, reverse_complement, a_count, g_count, c_count, t_count]
-
-print(data)
+	data = [identifiers[count], reverse_complement, a_count, g_count, c_count, t_count]
+	count += 1
+	print(data)
